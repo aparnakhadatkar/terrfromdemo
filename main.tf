@@ -1,7 +1,3 @@
-provider azurerm{
-    features {}
-}
-
 resource azurerm_resource_group "main" {
  name  =  "myrg05102025"
  location  =  "eastus"
