@@ -50,44 +50,46 @@ resource azurerm_network_interface "main" {
 
 ## Virtual Machine 
 
-resource azurerm_virtual_machine "main" {
- name                  = "myvm05203035"
- location              = azurerm_resource_group.main.location
- resource_group_name   = azurerm_resource_group.main.name
- vm_size                  = "standard_B2s"
- admin_username        = "azureuser"
- admin_password        = "Password.1!!"
- network_interface_ids = azurerm_network_interface.main.id
+resource "azurerm_windows_virtual_machine" "main" {
+  name                  = "myvm05203035"
+  location              = azurerm_resource_group.main.location
+  resource_group_name   = azurerm_resource_group.main.name
+  size                  = "Standard_B2s"
+  admin_username        = "azureuser"
+  admin_password        = "Password.1!!"
+  network_interface_ids = [azurerm_network_interface.main.id]
 
- storage_os_disk {
-    name                  = "win-os-disk"
-    caching               = "read-only"
-    storage_account_type  = "standard-LRS"
- }
+  os_disk {
+    name                 = "win-os-disk"
+    caching              = "ReadOnly"
+    storage_account_type = "Standard_LRS"
+  }
 
- source_image_referance {
-   publisher            = "MicrosoftWindowsServer"
-   offer                = "WindowsServer"
-   Sku                  = "2029-Datacenter"
-   version              = "lastest"
- }
+  source_image_reference {
+    publisher = "MicrosoftWindowsServer"
+    offer     = "WindowsServer"
+    sku       = "2022-Datacenter"
+    version   = "latest"
+  }
 }
+
 
 ## Kubernet Cluster
 
-resource azurerm_kubernetes_cluster "main" {
-    name                  = "ask-demo"
-    location              = azurerm_resource_group.main.location
-    resource_group_name   = azurerm_resource_group.main.name
-    dns_prefix            = "aksdemo"
+resource "azurerm_kubernetes_cluster" "main" {
+  name                = "aks-demo"
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
+  dns_prefix          = "aksdemo"
 
-    default_node_pool {
-        name          = "default"
-        node_count    = 1
-        vm_size       = "Standar_d2s_v3"
-    }
+  default_node_pool {
+    name       = "default"
+    node_count = 1
+    vm_size    = "Standard_D2s_v3"
+  }
 
-    identity {
-        type  = "SystemAssigned"
-    }
+  identity {
+    type = "SystemAssigned"
+  }
 }
+
