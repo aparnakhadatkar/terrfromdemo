@@ -1,54 +1,42 @@
-name: 'Terraform'
+name: Deploy Azure Resources with Terraform
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-
-permissions:
-  contents: read
+    branches:
+      - main
 
 jobs:
-  terraform:
-    name: 'Terraform'
+  deploy:
     runs-on: ubuntu-latest
-    environment: production
-
-    # Environment variables for Azure authentication
-    env:
-      ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
-      ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
-      ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
-      ARM_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-
-    defaults:
-      run:
-        shell: bash
-
     steps:
-      # Checkout the repository
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      # Setup Terraform CLI and authenticate to Terraform Cloud
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
+        uses: hashicorp/setup-terraform@v3
         with:
-          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+          terraform_version: 1.x
 
-      # Initialize Terraform
       - name: Terraform Init
-        run: terraform init
+        run: terraform init -backend-config="resource_group_name=${{ secrets.AZURE_RESOURCE_GROUP }}" -backend-config="storage_account_name=${{ secrets.AZURE_STORAGE_ACCOUNT }}" -backend-config="container_name=${{ secrets.AZURE_CONTAINER_NAME }}"
+        env:
+          ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
 
-      # Format Terraform code
-      - name: Terraform Format
-        run: terraform fmt -recursive
-
-      # Plan Terraform changes
       - name: Terraform Plan
-        run: terraform plan -input=false
+        run: terraform plan
+        env:
+          ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
 
-      # Apply Terraform on push to main
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terraform apply -auto-approve -input=false
+        run: terraform apply -auto-approve
+        env:
+          ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
