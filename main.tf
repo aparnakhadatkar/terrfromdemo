@@ -23,13 +23,13 @@ resource azurerm_subnet "main" {
  name                 = "mysubnet05203035"
  resource_group       =  azurerm_resource_group.main.name
  virtual_network_name = azurerm_virtual_network.main.name
- address_prefix       = ["10.0.1.0/24]
+ address_prefix       = ["10.0.1.0/24"]
 }  
 
 resource azurerm_public_ip "main" {
  name               = "mypip05203035"
  location           = azurerm_resource_group.main.location
- resource_group     =  azurerm_resource_group.main.name
+ resource_group     = azurerm_resource_group.main.name
  allocation_method  = "Daynamic"
 }
 
