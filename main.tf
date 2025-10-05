@@ -7,7 +7,7 @@ resource azurerm_storage_account "main" {
  name                    = "str05102025"
  resource_group_name      = azurerm_resource_group.main.name
  location                = azurerm_resource_group.main.location
- account_tier            = "standard"
+ account_tier            = "Standard"
  account_replication_type = "LRS"
 
 }
@@ -23,14 +23,14 @@ resource azurerm_subnet "main" {
  name                 = "mysubnet05203035"
  resource_group_name  = azurerm_resource_group.main.name
  virtual_network_name = azurerm_virtual_network.main.name
- address_prefix       = ["10.0.1.0/24"]
+ address_prefixes       = ["10.0.1.0/24"]
 }  
 
 resource azurerm_public_ip "main" {
  name               = "mypip05203035"
  location           = azurerm_resource_group.main.location
  resource_group_name = azurerm_resource_group.main.name
- allocation_method  = "Daynamic"
+ allocation_method  = "Dynamic"
 }
 
 ## Network Interface
@@ -39,7 +39,7 @@ resource azurerm_network_interface "main" {
     location           = azurerm_resource_group.main.location
     resource_group_name = azurerm_resource_group.main.name
 
-    ip_configuration "main" {
+    ip_configuration { 
      name                         = "ipconfig1"
      subnet_id                    = azurerm_subnet.main.id
      private_ip_allocation_method = "Daynamic"
@@ -48,9 +48,9 @@ resource azurerm_network_interface "main" {
     }
 }
 
-## Virual Machine 
+## Virtual Machine 
 
-resource azurerm_vitual_machine "main" {
+resource azurerm_virtual_machine "main" {
  name                  = "myvm05203035"
  location              = azurerm_resource_group.main.location
  resource_group_name   = azurerm_resource_group.main.name
