@@ -75,7 +75,7 @@ resource azurerm_vitual_machine "main" {
 
 ## Kubernet Cluster
 
-resource azurerm_kubernetes_cluster {
+resource azurerm_kubernetes_cluster "main" {
     name                  = "ask-demo"
     location              = azurerm_resource_group.main.location
     resource_group        = azurerm_resource_group.main.name
