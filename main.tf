@@ -5,7 +5,7 @@ resource azurerm_resource_group "main" {
 
 resource azurerm_storage_account "main" {
  name                    = "str05102025"
- resource_group          = azurerm_resource_group.main.name
+ resource_group_name      = azurerm_resource_group.main.name
  location                = azurerm_resource_group.main.location
  account_tier            = "standard"
  account_replication_type = "LRS"
@@ -14,14 +14,14 @@ resource azurerm_storage_account "main" {
 
 resource azurerm_virtual_network "main" {
  name                    = "myvnet05203035"
- resource_group          = azurerm_resource_group.main.name
+ resource_group_name     = azurerm_resource_group.main.name
  location                = azurerm_resource_group.main.location
  address_space           = ["10.0.0.0/16"]
 }
 
 resource azurerm_subnet "main" {
  name                 = "mysubnet05203035"
- resource_group       =  azurerm_resource_group.main.name
+ resource_group_name  = azurerm_resource_group.main.name
  virtual_network_name = azurerm_virtual_network.main.name
  address_prefix       = ["10.0.1.0/24"]
 }  
@@ -29,7 +29,7 @@ resource azurerm_subnet "main" {
 resource azurerm_public_ip "main" {
  name               = "mypip05203035"
  location           = azurerm_resource_group.main.location
- resource_group     = azurerm_resource_group.main.name
+ resource_group_name = azurerm_resource_group.main.name
  allocation_method  = "Daynamic"
 }
 
@@ -37,7 +37,7 @@ resource azurerm_public_ip "main" {
 resource azurerm_network_interface "main" {
     name               = "mynic05203035"
     location           = azurerm_resource_group.main.location
-    resource_group     = azurerm_resource_group.main.name
+    resource_group_name = azurerm_resource_group.main.name
 
     ip_configuration "main" {
      name                         = "ipconfig1"
@@ -53,7 +53,7 @@ resource azurerm_network_interface "main" {
 resource azurerm_vitual_machine "main" {
  name                  = "myvm05203035"
  location              = azurerm_resource_group.main.location
- resource_group        = azurerm_resource_group.main.name
+ resource_group_name   = azurerm_resource_group.main.name
  size                  = "standard_B2s"
  admin_username        = "azureuser"
  admin_password        = "Password.1!!"
@@ -78,7 +78,7 @@ resource azurerm_vitual_machine "main" {
 resource azurerm_kubernetes_cluster "main" {
     name                  = "ask-demo"
     location              = azurerm_resource_group.main.location
-    resource_group        = azurerm_resource_group.main.name
+    resource_group_name   = azurerm_resource_group.main.name
     dns_prefix            = "aksdemo"
 
     default_node_pool {
