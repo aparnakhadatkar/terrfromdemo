@@ -54,12 +54,12 @@ resource azurerm_virtual_machine "main" {
  name                  = "myvm05203035"
  location              = azurerm_resource_group.main.location
  resource_group_name   = azurerm_resource_group.main.name
- size                  = "standard_B2s"
+ vm_size                  = "standard_B2s"
  admin_username        = "azureuser"
  admin_password        = "Password.1!!"
  network_interface_ids = azurerm_network_interface.main.id
 
- os_disk {
+ storage_os_disk {
     name                  = "win-os-disk"
     caching               = "read-only"
     storage_account_type  = "standard-LRS"
